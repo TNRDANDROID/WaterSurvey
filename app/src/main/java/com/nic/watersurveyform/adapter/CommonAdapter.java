@@ -16,20 +16,20 @@ import java.util.List;
  * Created by shanmugapriyan on 25/05/16.
  */
 public class CommonAdapter extends BaseAdapter {
-    private List<WaterSurveyForm> electionWardNoCalls;
+    private List<WaterSurveyForm> waterSurveyFormList;
     private Context mContext;
     private String type;
 
 
-    public CommonAdapter(Context mContext, List<WaterSurveyForm> electionWardNoCalls, String type) {
-        this.electionWardNoCalls = electionWardNoCalls;
+    public CommonAdapter(Context mContext, List<WaterSurveyForm> waterSurveyFormList, String type) {
+        this.waterSurveyFormList = waterSurveyFormList;
         this.mContext = mContext;
         this.type = type;
     }
 
 
     public int getCount() {
-        return electionWardNoCalls.size();
+        return waterSurveyFormList.size();
     }
 
 
@@ -49,20 +49,12 @@ public class CommonAdapter extends BaseAdapter {
 //        TextView tv_type = (TextView) view.findViewById(R.id.tv_spinner_item);
         View view = inflater.inflate(R.layout.spinner_value, parent, false);
         TextView tv_type = (TextView) view.findViewById(R.id.spinner_list_value);
-        WaterSurveyForm electionWardNoCall = electionWardNoCalls.get(position);
+        WaterSurveyForm waterSurveyForm = waterSurveyFormList.get(position);
 
-        if (type.equalsIgnoreCase("DistrictList")) {
-            tv_type.setText(electionWardNoCall.getDistrictName());
-        } else if (type.equalsIgnoreCase("BlockList")) {
-            tv_type.setText(electionWardNoCall.getLocalBodyName());
-        } else if (type.equalsIgnoreCase("RuralUrbanList")) {
-            tv_type.setText(electionWardNoCall.getRuralUrbanName());
-        } else if (type.equalsIgnoreCase("MunicipalityList")) {
-            tv_type.setText(electionWardNoCall.getLocalBodyName());
-        } else if (type.equalsIgnoreCase("TownPanchayatList")) {
-            tv_type.setText(electionWardNoCall.getLocalBodyName());
-        } else if (type.equalsIgnoreCase("CorporationList")) {
-            tv_type.setText(electionWardNoCall.getLocalBodyName());
+        if (type.equalsIgnoreCase("VillageList")) {
+            tv_type.setText(waterSurveyForm.getPvName());
+        } else if (type.equalsIgnoreCase("HabitationList")) {
+            tv_type.setText(waterSurveyForm.getHabitationName());
         }
         return view;
     }

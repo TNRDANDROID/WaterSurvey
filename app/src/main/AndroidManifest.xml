@@ -37,6 +37,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.nic.watersurveyform.activity.WaterConnection"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
 
     </application>
 

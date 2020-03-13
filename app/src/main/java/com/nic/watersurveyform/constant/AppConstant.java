@@ -38,17 +38,24 @@ public class AppConstant {
     public static String PV_NAME = "pvname";
     public static String DESIG_NAME = "desig_name";
     public static String RO_USER_DETAILS = "ro_user_details";
-    public static String LOCALBODY_NO = "localbody_no";
-    public static String LOCALBODY_NAME = "localbody_name";
-    public static String RO_USER_NAME = "ro_user_name";
-    public static String RO_MOBILE_NO = "ro_mobile_no";
-    public static String LOCALBODY_TYPE = "localbody_type";
-    public static String LOCALBODY_ABBR = "localbody_abbr";
+
 
     public static String HABB_CODE = "habitation_code";
+    public static String HAB_CODE = "hab_code";
     public static String HABITATION_NAME = "habitation_name";
+
+    public static String EDIT_ID = "edit_id";
+    public static String NAME_OF_FAMILY_HEAD = "name_of_family_head";
+    public static String FAMILY_HEAD_TITLE = "family_head_title";
+    public static String FATHER_HUSBAND_NAME = "father_husband_name";
+    public static String TYPE_OF_ID = "type_of_id";
+    public static String TYPE_OF_ID_NUMBER = "type_of_id_number";
+    public static String GOVT_SCHEME_YES_NO = "govt_scheme_y_n";
+    public static String GOVT_SCHEME_ID = "govt_scheme_id";
 
     public static String KEY_VILLAGE_LIST_DISTRICT_BLOCK_WISE = "village_list_district_block_wise";
     public static String KEY_HABITATION_LIST_DISTRICT_BLOCK_WISE = "habitation_list_district_block_wise";
+    public static String KEY_SCHEME_LIST = "bna_sanitation_survey_scheme";
+    public static String KEY_BNA_SANITATION_SURVEY = "bna_sanitation_survey";
 
 }

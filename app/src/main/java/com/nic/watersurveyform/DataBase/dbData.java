@@ -139,6 +139,119 @@ public class dbData {
         return cards;
     }
 
+    public WaterSurveyForm insertUserVillageWise(WaterSurveyForm userVillageWiseUser) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.DISTRICT_CODE, userVillageWiseUser.getDistictCode());
+        values.put(AppConstant.BLOCK_CODE, userVillageWiseUser.getBlockCode());
+        values.put(AppConstant.PV_CODE, userVillageWiseUser.getPvCode());
+        values.put(AppConstant.HAB_CODE, userVillageWiseUser.getHabCode());
+        values.put(AppConstant.EDIT_ID, userVillageWiseUser.getEditId());
+        values.put(AppConstant.NAME_OF_FAMILY_HEAD, userVillageWiseUser.getNameOfFamilyHead());
+        values.put(AppConstant.FAMILY_HEAD_TITLE, userVillageWiseUser.getFamilyHeadTitle());
+        values.put(AppConstant.FATHER_HUSBAND_NAME, userVillageWiseUser.getFatherHusbandName());
+        values.put(AppConstant.TYPE_OF_ID, userVillageWiseUser.getTypeOfId());
+        values.put(AppConstant.TYPE_OF_ID_NUMBER, userVillageWiseUser.getTypeOfIdNUmber());
+
+        long id = db.insert(DBHelper.USER_LIST_VILLAGE_WISE,null,values);
+        Log.d("Insert_id_user_village", String.valueOf(id));
+
+        return userVillageWiseUser;
+    }
+
+    public ArrayList<WaterSurveyForm> getuserVillageWise(String dcode, String bcode,String pvcode) {
+
+        ArrayList<WaterSurveyForm > cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from "+DBHelper.USER_LIST_VILLAGE_WISE+" where dcode = "+dcode+" and bcode = "+bcode+" and pvcode = "+pvcode+" order by pvcode asc",null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    WaterSurveyForm  card = new WaterSurveyForm ();
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setHabCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.HAB_CODE)));
+                    card.setEditId(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.EDIT_ID)));
+                    card.setNameOfFamilyHead(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.NAME_OF_FAMILY_HEAD)));
+                    card.setFamilyHeadTitle(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.FAMILY_HEAD_TITLE)));
+                    card.setFatherHusbandName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.FATHER_HUSBAND_NAME)));
+                    card.setTypeOfId(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_ID)));
+                    card.setTypeOfIdNUmber(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_ID_NUMBER)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e){
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally{
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+
+    public ArrayList<WaterSurveyForm> getuserHabitationWise(String dcode, String bcode,String pvcode,String hab_code) {
+
+        ArrayList<WaterSurveyForm > cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from "+DBHelper.USER_LIST_VILLAGE_WISE+" where dcode = "+dcode+" and bcode = "+bcode+" and pvcode = "+pvcode+"  and hab_code = "+hab_code+" order by pvcode asc",null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    WaterSurveyForm  card = new WaterSurveyForm ();
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setHabCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.HAB_CODE)));
+                    card.setEditId(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.EDIT_ID)));
+                    card.setNameOfFamilyHead(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.NAME_OF_FAMILY_HEAD)));
+                    card.setFamilyHeadTitle(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.FAMILY_HEAD_TITLE)));
+                    card.setFatherHusbandName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.FATHER_HUSBAND_NAME)));
+                    card.setTypeOfId(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_ID)));
+                    card.setTypeOfIdNUmber(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.TYPE_OF_ID_NUMBER)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e){
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally{
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
 
     public void deleteAllTables(){
         deleteVillageTable();

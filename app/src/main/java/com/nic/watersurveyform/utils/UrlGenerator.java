@@ -23,6 +23,9 @@ public class UrlGenerator {
     public static String getWorkListUrl() {
         return NICApplication.getAppString(R.string.APP_MAIN_SERVICES_URL);
     }
+    public static String getWaterSurveyVillageUrl() {
+        return NICApplication.getAppString(R.string.WATER_SURVEY_VILLAGE_URL);
+    }
 
     public static String getTnrdHostName() {
         return NICApplication.getAppString(R.string.TNRD_HOST_NAME);

@@ -330,4 +330,22 @@ public class Utils {
         Log.d("HabListDistBlock", "" + dataSet);
         return dataSet;
     }
+
+    public static JSONObject SchemeListJsonParams() throws JSONException {
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_LIST);
+        Log.d("schemelistobj", "" + dataSet);
+        return dataSet;
+    }
+
+    public static JSONObject WaterSurveyVillageParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_BNA_SANITATION_SURVEY);
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
+        dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
+        Log.d("SurveyVillageParams_obj", "" + dataSet);
+        return dataSet;
+    }
 }

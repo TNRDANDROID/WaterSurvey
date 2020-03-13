@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,9 @@ import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.nic.watersurveyform.DataBase.DBHelper;
@@ -25,6 +29,7 @@ import com.nic.watersurveyform.DataBase.dbData;
 import com.nic.watersurveyform.R;
 import com.nic.watersurveyform.Session.PrefManager;
 import com.nic.watersurveyform.adapter.CommonAdapter;
+import com.nic.watersurveyform.adapter.HomePageAdapter;
 import com.nic.watersurveyform.api.Api;
 import com.nic.watersurveyform.api.ApiService;
 import com.nic.watersurveyform.api.ServerResponse;
@@ -37,6 +42,7 @@ import com.nic.watersurveyform.utils.UrlGenerator;
 import com.nic.watersurveyform.utils.Utils;
 import com.nic.watersurveyform.windowpreferences.WindowPreferencesManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,9 +53,6 @@ import java.util.List;
 public class HomePage extends AppCompatActivity implements MyDialog.myOnClickListener, Api.ServerResponseListener {
 
     private HomePageBinding homePageBinding;
-    private List<String> RuralUrbanList = new ArrayList<>();
-    private List<WaterSurveyForm> District = new ArrayList<>();
-    private List<WaterSurveyForm> Block = new ArrayList<>();
     public dbData dbData = new dbData(this);
     private SQLiteDatabase db;
     public static DBHelper dbHelper;
@@ -61,6 +64,8 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
     private ProgressHUD progressHUD;
     private List<WaterSurveyForm> Village = new ArrayList<>();
     private List<WaterSurveyForm> Habitation = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private HomePageAdapter homePageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,15 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.setActivity(this);
         WindowPreferencesManager windowPreferencesManager = new WindowPreferencesManager(this);
         windowPreferencesManager.applyEdgeToEdgePreference(getWindow());
+
+        recyclerView = homePageBinding.userList;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setNestedScrollingEnabled(false);
+        homePageBinding.recyclerTitle.setVisibility(View.GONE);
+        homePageBinding.userList.setVisibility(View.GONE);
+        homePageBinding.notFoundTv.setVisibility(View.GONE);
 
         try {
             dbHelper = new DBHelper(this);
@@ -82,16 +96,25 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.homeImg.startAnimation(smalltobig);
         homePageBinding.selectVillageTv.setTranslationX(800);
         homePageBinding.villageLayout.setTranslationX(800);
-        homePageBinding.selectHabitationTv.setTranslationX(800);
-        homePageBinding.habitationLayout.setTranslationX(800);
+        homePageBinding.selectHabTv.setTranslationX(800);
+        homePageBinding.habLayout.setTranslationX(800);
+        homePageBinding.selectStreetTv.setTranslationX(800);
+        homePageBinding.streetLayout.setTranslationX(800);
+
 
         homePageBinding.selectVillageTv.setAlpha(0);
         homePageBinding.villageLayout.setAlpha(0);
+        homePageBinding.selectHabTv.setAlpha(0);
+        homePageBinding.habLayout.setAlpha(0);
+        homePageBinding.selectStreetTv.setAlpha(0);
+        homePageBinding.streetLayout.setAlpha(0);
 
         homePageBinding.selectVillageTv.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(400).start();
         homePageBinding.villageLayout.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(600).start();
-        homePageBinding.selectHabitationTv.animate().translationX(0).alpha(1).setDuration(1200).setStartDelay(800).start();
-        homePageBinding.habitationLayout.animate().translationX(0).alpha(1).setDuration(1400).setStartDelay(1000).start();
+        homePageBinding.selectHabTv.animate().translationX(0).alpha(1).setDuration(1200).setStartDelay(800).start();
+        homePageBinding.habLayout.animate().translationX(0).alpha(1).setDuration(1400).setStartDelay(1000).start();
+        homePageBinding.selectStreetTv.animate().translationX(0).alpha(1).setDuration(1600).setStartDelay(1200).start();
+        homePageBinding.streetLayout.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1400).start();
 
 //
 //        handler.postDelayed(new Runnable() {
@@ -106,20 +129,65 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
-
+                    homePageBinding.recyclerTitle.setVisibility(View.GONE);
+                    homePageBinding.userList.setVisibility(View.GONE);
+                    homePageBinding.notFoundTv.setVisibility(View.GONE);
                     pref_Village = Village.get(position).getPvName();
                     prefManager.setVillageListPvName(pref_Village);
                     prefManager.setPvCode(Village.get(position).getPvCode());
+                    getWaterSurveyListVillageWise();
                     habitationFilterSpinner(prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                homePageBinding.recyclerTitle.setVisibility(View.GONE);
+                homePageBinding.userList.setVisibility(View.GONE);
+                homePageBinding.notFoundTv.setVisibility(View.GONE);
             }
         });
 
+        homePageBinding.habitationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    prefManager.setkeyHabCode(Habitation.get(position).getHabCode());
+                    homePageBinding.recyclerTitle.setVisibility(View.VISIBLE);
+                    homePageBinding.userList.setVisibility(View.VISIBLE);
+                    homePageBinding.notFoundTv.setVisibility(View.GONE);
+                    new fetchUserList().execute();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                homePageBinding.recyclerTitle.setVisibility(View.GONE);
+                homePageBinding.userList.setVisibility(View.GONE);
+                homePageBinding.notFoundTv.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    public class fetchUserList extends AsyncTask<Void, Void,
+            ArrayList<WaterSurveyForm>> {
+        @Override
+        protected ArrayList<WaterSurveyForm> doInBackground(Void... params) {
+            dbData.open();
+            ArrayList<WaterSurveyForm> waterSurveys = new ArrayList<>();
+            waterSurveys = dbData.getuserHabitationWise(prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode(),prefManager.getKeyHabCode());
+            Log.d("LIST_COUNT", String.valueOf(waterSurveys.size()));
+            return waterSurveys;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<WaterSurveyForm> waterSurveyForms) {
+            super.onPostExecute(waterSurveyForms);
+            recyclerView.setVisibility(View.VISIBLE);
+            homePageAdapter = new HomePageAdapter(HomePage.this, waterSurveyForms);
+            recyclerView.setAdapter(homePageAdapter);
+        }
     }
 
     public void villageFilterSpinner(String filterVillage) {
@@ -196,21 +264,22 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
 
 
 
-    public void getRODetailsList() {
+    public void getWaterSurveyListVillageWise() {
         try {
-            new ApiService(this).makeJSONObjectRequest("RODetailsList", Api.Method.POST, UrlGenerator.getWorkListUrl(), roUserDetailsListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("WaterSurveyVillageWise", Api.Method.POST, UrlGenerator.getWaterSurveyVillageUrl(), waterSurveyVillageJson(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
-    public JSONObject roUserDetailsListJsonParams() throws JSONException {
-        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.roDetailsListJsonParams().toString());
+    public JSONObject waterSurveyVillageJson() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.WaterSurveyVillageParams(this).toString());
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
-        Log.d("roUserDetailsList", "" + authKey);
+        Log.d("waterSurveyVillageJson", "" + authKey);
+        Log.d("daataset", "" + dataSet.toString());
         return dataSet;
     }
 
@@ -220,10 +289,63 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
             JSONObject responseObj = serverResponse.getJsonResponse();
             String urlType = serverResponse.getApi();
 
+            if ("WaterSurveyVillageWise".equals(urlType) && responseObj != null) {
+                String key = responseObj.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                 new InsertUserVillageWiseTask().execute(jsonObject);
+                Log.d("de",responseObj.getJSONArray(AppConstant.JSON_DATA).getJSONObject(0).getString("name_of_family_head"));
+                }
+                Log.d("WaterSurveyVillageWise", "" + responseDecryptedBlockKey);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    public class InsertUserVillageWiseTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.open();
+            ArrayList<WaterSurveyForm> villageUserlist_count = dbData.getuserVillageWise(prefManager.getDistrictCode(),prefManager.getBlockCode(),prefManager.getPvCode());
+            if (villageUserlist_count.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        WaterSurveyForm villageListValue = new WaterSurveyForm();
+                        try {
+                            villageListValue.setDistictCode(jsonArray.getJSONObject(i).getString(AppConstant.DISTRICT_CODE));
+                            villageListValue.setBlockCode(jsonArray.getJSONObject(i).getString(AppConstant.BLOCK_CODE));
+                            villageListValue.setPvCode(jsonArray.getJSONObject(i).getString(AppConstant.PV_CODE));
+                            villageListValue.setHabCode(jsonArray.getJSONObject(i).getString(AppConstant.HAB_CODE));
+                            villageListValue.setEditId(jsonArray.getJSONObject(i).getString(AppConstant.EDIT_ID));
+                            villageListValue.setNameOfFamilyHead(jsonArray.getJSONObject(i).getString(AppConstant.NAME_OF_FAMILY_HEAD));
+                            villageListValue.setFamilyHeadTitle(jsonArray.getJSONObject(i).getString(AppConstant.FAMILY_HEAD_TITLE));
+                            villageListValue.setFatherHusbandName(jsonArray.getJSONObject(i).getString(AppConstant.FATHER_HUSBAND_NAME));
+                            villageListValue.setTypeOfId(jsonArray.getJSONObject(i).getString(AppConstant.TYPE_OF_ID));
+                            villageListValue.setTypeOfIdNUmber(jsonArray.getJSONObject(i).getString(AppConstant.TYPE_OF_ID_NUMBER));
+                            dbData.insertUserVillageWise(villageListValue);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+
+    }
+
 
     @Override
     public void OnError(VolleyError volleyError) {
@@ -250,7 +372,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
     public void refreshScreenCallApi() {
         if (Utils.isOnline()) {
             deleteRefreshTable();
-            setAnimationView();
+           // setAnimationView();
 
         } else {
             Utils.showAlert(this, getResources().getString(R.string.no_internet));
@@ -295,13 +417,13 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         dbData.deleteAllTables();
     }
 
-    public void setAnimationView() {
-        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-        rotation.setRepeatCount(Animation.INFINITE);
-        homePageBinding.refresh.startAnimation(rotation);
-    }
-
-    public void clearAnimations() {
-        homePageBinding.refresh.clearAnimation();
-    }
+//    public void setAnimationView() {
+//        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+//        rotation.setRepeatCount(Animation.INFINITE);
+//        homePageBinding.refresh.startAnimation(rotation);
+//    }
+//
+//    public void clearAnimations() {
+//        homePageBinding.refresh.clearAnimation();
+//    }
 }

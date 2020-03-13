@@ -244,10 +244,12 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         try {
             JSONObject loginResponse = serverResponse.getJsonResponse();
             String urlType = serverResponse.getApi();
-            String status = loginResponse.getString(AppConstant.KEY_STATUS);
-            String response = loginResponse.getString(AppConstant.KEY_RESPONSE);
+            String status;
+            String response;
 
             if ("LoginScreen".equals(urlType)) {
+                status = loginResponse.getString(AppConstant.KEY_STATUS);
+                response = loginResponse.getString(AppConstant.KEY_RESPONSE);
                 if (status.equalsIgnoreCase("OK")) {
                     if (response.equals("LOGIN_SUCCESS")) {
                         String key = loginResponse.getString(AppConstant.KEY_USER);
@@ -267,6 +269,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                         prefManager.setUserPassKey(decryptedKey);
                         getVillageList();
                         getHabList();
+                        getSchemeList();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -300,11 +303,22 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                 }
                 Log.d("HabitationList", "" + responseDecryptedBlockKey);
             }
+            if ("SchemeList".equals(urlType) && loginResponse != null) {
+                String key = loginResponse.getString(AppConstant.ENCODE_DATA);
+                String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
+                JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
+                if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
+                  //  new InsertHabTask().execute(jsonObject);
+                }
+                Log.d("SchemeList", "" + responseDecryptedBlockKey);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+
 
     public void getVillageList() {
         try {
@@ -317,6 +331,14 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     public void getHabList() {
         try {
             new ApiService(this).makeJSONObjectRequest("HabitationList", Api.Method.POST, UrlGenerator.getServicesListUrl(), habitationListJsonParams(), "not cache", this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getSchemeList() {
+        try {
+            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getServicesListUrl(), schemeListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -338,6 +360,15 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
         Log.d("HabitationList", "" + authKey);
+        return dataSet;
+    }
+
+    public JSONObject schemeListJsonParams() throws JSONException {
+        String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.SchemeListJsonParams().toString());
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
+        dataSet.put(AppConstant.DATA_CONTENT, authKey);
+        Log.d("SchemeList", "" + authKey);
         return dataSet;
     }
 

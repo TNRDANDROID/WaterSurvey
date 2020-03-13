@@ -1,7 +1,9 @@
 package com.nic.watersurveyform.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nic.watersurveyform.R;
 import com.nic.watersurveyform.Session.PrefManager;
+import com.nic.watersurveyform.activity.WaterConnection;
 import com.nic.watersurveyform.databinding.HomePageAdapterBinding;
 import com.nic.watersurveyform.pojo.WaterSurveyForm;
 
@@ -22,17 +25,17 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
     private static Activity context;
     private PrefManager prefManager;
-    private List<WaterSurveyForm> pendingListValues;
+    private List<WaterSurveyForm> userListValues;
     static JSONObject dataset = new JSONObject();
 
     private LayoutInflater layoutInflater;
 
-    public HomePageAdapter(Activity context, List<WaterSurveyForm> pendingListValues) {
+    public HomePageAdapter(Activity context, List<WaterSurveyForm> userListValues) {
 
         this.context = context;
         prefManager = new PrefManager(context);
 
-        this.pendingListValues = pendingListValues;
+        this.userListValues = userListValues;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
         HomePageAdapterBinding homePageAdapterBinding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.home_page, viewGroup, false);
+                DataBindingUtil.inflate(layoutInflater, R.layout.home_page_adapter, viewGroup, false);
         return new HomePageAdapter.MyViewHolder(homePageAdapterBinding);
 
     }
@@ -59,61 +62,27 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-//        holder.pendingAdapterBinding.habName.setText(pendingListValues.get(position).getHabitationName());
-//        holder.pendingAdapterBinding.villageName.setText(pendingListValues.get(position).getPvName());
-//        holder.pendingAdapterBinding.secId.setText(pendingListValues.get(position).getSeccId());
-//        holder.pendingAdapterBinding.name.setText(pendingListValues.get(position).getBeneficiaryName());
-//
-//        if(image.getCount() > 0) {
-//            holder.pendingAdapterBinding.viewOfflineImages.setVisibility(View.VISIBLE);
-//        }
-//        else {
-//            holder.pendingAdapterBinding.viewOfflineImages.setVisibility(View.GONE);
-//        }
-//
-//        holder.pendingAdapterBinding.upload.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(button_text.equals("Take Photo")) {
-//                    if(image.getCount() == 2 ) {
-//                        uploadPending(position);
-//                    }
-//                    else {
-//                        new AlertDialog.Builder(context)
-//                                .setTitle("Alert")
-//                                .setMessage("There's some photos are missing.Please, delete it and enter details once again")
-//                                .setIcon(R.mipmap.alert)
-//                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int whichButton) {
-//                                        dialog.cancel();
-//                                    }
-//                                }).show();
-//
-//                    }
-//                }
-//                else if(button_text.equals("Save details")){
-//                    uploadPending(position);
-//                }
-//            }
-//        });
-//
-//        holder.pendingAdapterBinding.delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                deletePending(position);
-//            }
-//        });
-//
-//
-//
-//        holder.pendingAdapterBinding.viewOfflineImages.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewImages(position);
-//            }
-//        });
+        holder.homePageAdapterBinding.nameofFamilyHead.setText(userListValues.get(position).getNameOfFamilyHead());
+        holder.homePageAdapterBinding.fatherHusbandName.setText(userListValues.get(position).getFatherHusbandName());
+        holder.homePageAdapterBinding.idCardType.setText(userListValues.get(position).getTypeOfId()+ " ("+userListValues.get(position).getTypeOfIdNUmber()+")");
 
 
+        holder.homePageAdapterBinding.userLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openWaterSurvey(position);
+            }
+        });
+    }
+
+    public void openWaterSurvey(int pos) {
+        Activity activity = (Activity) context;
+        Intent intent = new Intent(activity, WaterConnection.class);
+//        intent.putExtra(AppConstant.PV_CODE, serverDataListValuesFiltered.get(pos).getPvCode());
+//        intent.putExtra(AppConstant.HAB_CODE, serverDataListValuesFiltered.get(pos).getHabCode());
+//        intent.putExtra(AppConstant.SECC_ID, serverDataListValuesFiltered.get(pos).getSeccId());
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
 
@@ -209,7 +178,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return pendingListValues.size();
+        return userListValues.size();
     }
 
 

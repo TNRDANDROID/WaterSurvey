@@ -31,6 +31,60 @@ public class WaterSurveyForm {
     private String localBodyAbbr;
     private String HabCode;
     private String HabitationName;
+    private String nameOfFamilyHead;
+    private String editId;
+    private String familyHeadTitle;
+    private String fatherHusbandName;
+    private String typeOfId;
+    private String typeOfIdNUmber;
+
+    public String getTypeOfId() {
+        return typeOfId;
+    }
+
+    public void setTypeOfId(String typeOfId) {
+        this.typeOfId = typeOfId;
+    }
+
+    public String getTypeOfIdNUmber() {
+        return typeOfIdNUmber;
+    }
+
+    public void setTypeOfIdNUmber(String typeOfIdNUmber) {
+        this.typeOfIdNUmber = typeOfIdNUmber;
+    }
+
+    public String getNameOfFamilyHead() {
+        return nameOfFamilyHead;
+    }
+
+    public void setNameOfFamilyHead(String nameOfFamilyHead) {
+        this.nameOfFamilyHead = nameOfFamilyHead;
+    }
+
+    public String getEditId() {
+        return editId;
+    }
+
+    public void setEditId(String editId) {
+        this.editId = editId;
+    }
+
+    public String getFamilyHeadTitle() {
+        return familyHeadTitle;
+    }
+
+    public void setFamilyHeadTitle(String familyHeadTitle) {
+        this.familyHeadTitle = familyHeadTitle;
+    }
+
+    public String getFatherHusbandName() {
+        return fatherHusbandName;
+    }
+
+    public void setFatherHusbandName(String fatherHusbandName) {
+        this.fatherHusbandName = fatherHusbandName;
+    }
 
     public String getHabitationName() {
         return HabitationName;
