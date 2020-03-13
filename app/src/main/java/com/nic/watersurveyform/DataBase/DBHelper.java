@@ -13,6 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String VILLAGE_TABLE_NAME = "villageTable";
     public static final String HABITATION_TABLE_NAME = "habitaionTable";
     public static final String USER_LIST_VILLAGE_WISE = "userlistVillageWise";
+    public static final String SAVE_WATER_CONN_DETAILS = "saveWaterConnectionDetails";
     private Context context;
 
     public DBHelper(Context context) {
@@ -48,6 +49,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 "father_husband_name TEXT," +
                 "type_of_id TEXT," +
                 "type_of_id_number TEXT)");
+
+        db.execSQL("CREATE TABLE " + SAVE_WATER_CONN_DETAILS + " ("
+                + "dcode INTEGER," +
+                "bcode INTEGER," +
+                "pvcode INTEGER," +
+                "hab_code INTEGER," +
+                "edit_id INTEGER," +
+                "water_conn_available TEXT," +
+                "is_approved TEXT," +
+                "scheme_id TEXT)");
     }
 
     @Override
