@@ -30,17 +30,28 @@
         <activity
             android:name="com.nic.watersurveyform.activity.LoginScreen"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name="com.nic.watersurveyform.activity.HomePage"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name="com.nic.watersurveyform.activity.WaterConnection"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+
+        <activity
+            android:name="com.nic.watersurveyform.activity.FamilyCardDetails"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity
+            android:name="com.nic.watersurveyform.activity.PendingScreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="locked"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
 
     </application>

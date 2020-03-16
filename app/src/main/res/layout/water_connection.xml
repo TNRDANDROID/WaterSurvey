@@ -2,18 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
 
-        <variable
-            name="activity"
-            type="com.nic.watersurveyform.activity.WaterConnection" />
-    </data>
 
     <RelativeLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@drawable/background_gradient"
         android:orientation="vertical">
 
             <androidx.appcompat.widget.Toolbar
@@ -49,9 +44,8 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginRight="15dp"
                         android:adjustViewBounds="true"
-                        android:onClick="@{()-> activity.logout()}"
-                        android:scaleType="centerInside"
-                        android:src="@mipmap/log_out" />
+                         android:scaleType="centerInside"
+                        android:src="@mipmap/home_img" />
 
                 </RelativeLayout>
 
@@ -250,8 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/header"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/margin_left_20dp"
-                        android:background="@drawable/rectangle_box"
+                         android:background="@drawable/rectangle_box"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -431,7 +424,7 @@
 
                 <RelativeLayout
                     android:id="@+id/save_layout"
-                    android:onClick="@{()-> activity.openPendingScreen()}"
+
                     android:layout_width="190dp"
                     android:layout_height="45dp"
                     android:layout_below="@+id/scheme_layout"

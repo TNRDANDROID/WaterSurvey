@@ -55,6 +55,10 @@ public class CommonAdapter extends BaseAdapter {
             tv_type.setText(waterSurveyForm.getPvName());
         } else if (type.equalsIgnoreCase("HabitationList")) {
             tv_type.setText(waterSurveyForm.getHabitationName());
+        } else if (type.equalsIgnoreCase("StreetList")) {
+            tv_type.setText(waterSurveyForm.getStreetName());
+        } else if (type.equalsIgnoreCase("SchemeList")) {
+            tv_type.setText(waterSurveyForm.getSchemeName());
         }
         return view;
     }

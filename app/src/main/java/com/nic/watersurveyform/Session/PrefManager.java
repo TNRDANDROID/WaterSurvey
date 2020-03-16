@@ -3,7 +3,6 @@ package com.nic.watersurveyform.Session;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
 import com.nic.watersurveyform.constant.AppConstant;
 
 
@@ -35,6 +34,8 @@ public class PrefManager {
     private static final String KEY_BLOCK_CODE = "Block_Code";
     private static final String KEY_PV_CODE = "Pv_Code";
     private static final String KEY_HAB_CODE = "hab_code";
+    private static final String KEY_STREET_CODE = "street_code";
+    private static final String KEY_SCHEME_ID = "scheme_id";
     private static final String KEY_DISTRICT_NAME = "District_Name";
     private static final String KEY_BLOCK_NAME = "Block_Name";
     private static final String KEY_VILLAGE_LIST_PV_NAME = "Village_List_Pv_Name";
@@ -42,6 +43,7 @@ public class PrefManager {
     private static final String KEY_SPINNER_SELECTED_PVCODE = "spinner_selected_pv_code";
     private static final String KEY_DESIGNATION = "Designation";
     private static final String KEY_NAME = "Name";
+    private static final String KEY_DELETE_ID = "deleteId";
 
 
     private static final String IMEI = "imei";
@@ -169,8 +171,36 @@ public class PrefManager {
         return pref.getString(KEY_PV_CODE, null);
     }
 
+    public Object setStreetCode(Object key) {
+        editor.putString(KEY_STREET_CODE, String.valueOf(key));
+        editor.commit();
+        return key;
+    }
+
+    public String getStreetCode() {
+        return pref.getString(KEY_STREET_CODE, null);
+    }
 
 
+    public Object setSchemeId(Object key) {
+        editor.putString(KEY_SCHEME_ID, String.valueOf(key));
+        editor.commit();
+        return key;
+    }
+
+    public String getSchemeId() {
+        return pref.getString(KEY_SCHEME_ID, null);
+    }
+
+
+    public String getKeyDeleteId() {
+        return pref.getString(KEY_DELETE_ID,null);
+    }
+
+    public void setKeyDeleteId(String deleteId) {
+        editor.putString(KEY_DELETE_ID,deleteId);
+        editor.commit();
+    }
 
     public Object setDistrictName(Object key) {
         editor.putString(KEY_DISTRICT_NAME, String.valueOf(key));

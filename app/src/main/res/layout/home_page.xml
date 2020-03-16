@@ -1,77 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layout xmlns:customfontdemo="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
 
-    <data>
-
-        <variable
-            name="activity"
-            type="com.nic.watersurveyform.activity.HomePage" />
-    </data>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <com.google.android.material.appbar.AppBarLayout
+        <ImageView
+            android:id="@+id/home_img"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/view_background">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <TextView
-                        style="@style/font_poppins_semibold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/margin"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:text="Home Page"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:id="@+id/back_img"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:onClick="@{()-> activity.onBackPress()}"
-                        android:src="@mipmap/back_arrow" />
-
-                    <ImageView
-                        android:id="@+id/home_img"
-                        android:layout_width="30dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginRight="@dimen/_12sdp"
-                        android:src="@mipmap/home_img"
-                        android:visibility="gone"/>
-
-
-                </RelativeLayout>
-
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
+            android:layout_height="match_parent"
+            android:background="@drawable/background_gradient" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scroll_view"
@@ -82,204 +23,313 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="@dimen/_10sdp">
+                android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/select_village_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
+                    android:layout_marginLeft="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:text="Select Village"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
-                    style="@string/font_circular_bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <RelativeLayout
                     android:id="@+id/village_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/header"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:layout_below="@+id/select_village_tv"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
-                    android:background="@drawable/rectangle_box"
                     android:orientation="vertical">
 
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="15dp"
-
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/_15sdp"
-                        android:visibility="visible"
-                        style="@string/font_normal" />
-
-                    <Spinner
-                        android:id="@+id/village_spinner"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center" />
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <Spinner
+                            android:id="@+id/village_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+                    </androidx.cardview.widget.CardView>
 
                 </RelativeLayout>
-
-
                 <TextView
                     android:id="@+id/select_hab_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/village_layout"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:layout_below="@id/village_layout"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:text="Select Habitation"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
-                    style="@string/font_circular_bold" />
+                    android:textStyle="bold" />
 
                 <RelativeLayout
                     android:id="@+id/hab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/header"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/select_hab_tv"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
-                    android:background="@drawable/rectangle_box"
-                    android:orientation="vertical">
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="15dp"
-
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/_15sdp"
-                        android:visibility="visible"
-                        style="@string/font_normal" />
-
-                    <Spinner
-                        android:id="@+id/habitation_spinner"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center" />
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <Spinner
+                            android:id="@+id/habitation_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+                    </androidx.cardview.widget.CardView>
+
 
                 </RelativeLayout>
+
 
                 <TextView
                     android:id="@+id/select_street_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/hab_layout"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:layout_below="@id/hab_layout"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:text="Select Street"
-                    android:textColor="@android:color/black"
+
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
-                    style="@string/font_circular_bold" />
+
+                    android:textStyle="bold" />
 
                 <RelativeLayout
                     android:id="@+id/street_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/header"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/select_street_tv"
-                    android:layout_marginLeft="@dimen/margin_left_20dp"
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_marginRight="@dimen/margin_left_20dp"
-                    android:background="@drawable/rectangle_box"
                     android:orientation="vertical">
 
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="15dp"
-
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/_15sdp"
-                        android:visibility="visible"
-                        style="@string/font_normal" />
-
-                    <Spinner
-                        android:id="@+id/street_spinner"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_height="@dimen/header"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center" />
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <Spinner
+                            android:id="@+id/street_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+                    </androidx.cardview.widget.CardView>
 
                 </RelativeLayout>
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/user_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/street_layout"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="52dp"
-                    android:layout_marginBottom="8dp"
-                    android:fadeScrollbars="false"
-                    android:scrollbarSize="4dp"
-                    android:scrollbars="vertical"
-                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/not_found_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_58sdp"
-                    android:layout_below="@+id/user_list"
-                    android:text="No Record Found!"
-                    android:layout_centerInParent="true"
+                    android:layout_alignParentBottom="true"
+
+                    android:text="No Projects Found!"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_16sdp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/recycler_title"
-                    android:layout_width="match_parent"
+
+                <RelativeLayout
+                    android:id="@id/synchronize_layout"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="330dp"
-                    android:layout_marginEnd="0dp"
-                    android:text="User List"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/_16sdp"
-                    android:textStyle="bold"
-                    android:visibility="visible"/>
+                    android:layout_below="@+id/street_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_26sdp">
 
 
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/save_layout"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_50sdp"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:onClick="@{()-> activity.validate()}"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <TextView
+                            android:id="@+id/save"
+                            style="@string/font_circular_book"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:singleLine="true"
+                            android:text="Load User List"
+                            android:textAlignment="center"
+
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/_15sdp" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/syn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/synchronize_layout"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:background="@drawable/white_background_left_two_corners"
+                    android:onClick="@{()-> activity.openPendingScreen()}"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_8sdp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/take_photo_tv"
+                        style="@string/font_normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Synchronize to the server"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
 
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_gradient"
+            android:fitsSystemWindows="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/refresh"
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="@dimen/_23sdp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="start"
+                        android:background="@drawable/ic_autorenew_white_24dp"
+                        android:backgroundTint="@color/black" />
+
+
+                    <TextView
+                        android:id="@+id/title_tv"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Home Page"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/log_out"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="15dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/ic_exit_to_app_black_24dp"
+                        android:backgroundTint="@color/black"
+                        android:onClick="@{()-> activity.closeApplication()}"
+                        android:scaleType="centerInside" />
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.nic.watersurveyform.activity.HomePage" />
+    </data>
+
+
 </layout>

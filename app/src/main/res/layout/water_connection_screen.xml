@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.nic.watersurveyform.activity.WaterConnection" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/home_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_gradient" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/select_village_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:text="Name of the Family Head"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:id="@+id/village_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/select_village_tv"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <TextView
+                            android:id="@+id/name_of_family_head"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:inputType="textPersonName"
+                            android:singleLine="true"
+                            android:layout_margin="@dimen/_8sdp"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/_15sdp" />
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/select_hab_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/village_layout"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:text="Family Head Title"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:id="@+id/hab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/select_hab_tv"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <TextView
+                            android:id="@+id/family_head_title"
+                            style="@string/font_circular_book"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:singleLine="true"
+                            android:layout_margin="@dimen/_8sdp"
+
+                            android:textColor="@android:color/black"
+
+                            android:textSize="@dimen/_15sdp" />
+                    </androidx.cardview.widget.CardView>
+
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/select_street_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hab_layout"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:text="Father/Husband Name"
+
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15sdp"
+
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:id="@+id/father_husband_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/select_street_tv"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <TextView
+                            android:id="@+id/father_husband_name"
+                            style="@string/font_circular_book"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:layout_margin="@dimen/_8sdp"
+
+                            android:textSize="@dimen/_15sdp" />
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/water_conn_tv"
+                    style="@string/font_circular_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/father_husband_layout"
+                    android:layout_marginLeft="@dimen/margin_left_20dp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:text="வீட்டுக்கான குடிநீர் இணைப்பு பெறப்பட்டுள்ளதா?"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:id="@+id/water_connection_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/water_conn_tv"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_20sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_gravity="center"
+
+                                android:background="@drawable/rectangle_box"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+
+                                <CheckBox
+                                    android:id="@+id/available"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    android:checked="false"
+                                    android:gravity="center"
+                                    android:text="ஆம் "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_below="@+id/hab_layout"
+
+
+                                android:layout_gravity="center"
+                                android:orientation="horizontal">
+
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_gravity="center"
+                                android:background="@drawable/rectangle_box"
+                                android:orientation="horizontal">
+
+
+                                <CheckBox
+                                    android:id="@+id/not_available"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="இல்லை"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/approved_tv"
+                    style="@string/font_circular_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/water_connection_layout"
+                    android:layout_marginLeft="@dimen/margin_left_20dp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:text="ஆம் ’ எனில் அனுமதி பெற்ற குடிநீர் இணைப்பா?"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+
+                <RelativeLayout
+                    android:id="@+id/approval_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/approved_tv"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_gravity="center"
+
+                                android:background="@drawable/rectangle_box"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+
+                                <CheckBox
+                                    android:id="@+id/if_approved"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    android:checked="true"
+                                    android:gravity="center"
+                                    android:text="ஆம் "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_below="@+id/hab_layout"
+
+
+                                android:layout_gravity="center"
+                                android:orientation="horizontal">
+
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+
+                                android:layout_width="100dp"
+                                android:layout_height="@dimen/header"
+                                android:layout_gravity="center"
+                                android:background="@drawable/rectangle_box"
+                                android:orientation="horizontal">
+
+
+                                <CheckBox
+                                    android:id="@+id/not_approved"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="இல்லை"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/scheme_tv"
+                    style="@string/font_circular_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/approval_layout"
+                    android:layout_marginLeft="@dimen/margin_left_20dp"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginRight="@dimen/margin_left_20dp"
+                    android:text="Which Scheme?"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/scheme_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/scheme_tv"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/header"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <Spinner
+                            android:id="@+id/scheme_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center" />
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/save_layout"
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/scheme_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_26sdp"
+                    android:layout_marginBottom="@dimen/_26sdp">
+
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:clickable="true"
+                        android:onClick="@{()-> activity.validate()}"
+
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="3dp">
+
+                        <TextView
+                            android:id="@+id/save"
+                            style="@string/font_circular_book"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:singleLine="true"
+                            android:text="SAVE"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/_15sdp" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/not_found_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+
+                    android:text="No Projects Found!"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_gradient"
+            android:fitsSystemWindows="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/refresh"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="start"
+                        android:background="@mipmap/back_arrow"
+                        android:backgroundTint="@android:color/white"
+                        android:onClick="@{()-> activity.onBackPressed()}" />
+
+
+                    <TextView
+                        android:id="@+id/title_tv"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Water Connection"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/log_out"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="15dp"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/home_img"
+                        android:backgroundTint="@android:color/white"
+                        android:onClick="@{()-> activity.homePage()}"
+
+                        android:scaleType="centerInside" />
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</layout>

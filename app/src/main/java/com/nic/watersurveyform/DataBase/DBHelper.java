@@ -12,8 +12,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String VILLAGE_TABLE_NAME = "villageTable";
     public static final String HABITATION_TABLE_NAME = "habitaionTable";
+    public static final String SCHEME_TABLE_NAME = "schemeTable";
+    public static final String STREET_TABLE_NAME = "streetTable";
     public static final String USER_LIST_VILLAGE_WISE = "userlistVillageWise";
-    public static final String SAVE_WATER_CONN_DETAILS = "saveWaterConnectionDetails";
+    public static final String  SAVE_WATER_CONN_DETAILS = "saveWaterConnectionDetails";
     private Context context;
 
     public DBHelper(Context context) {
@@ -31,12 +33,24 @@ public class DBHelper extends SQLiteOpenHelper {
                 "pvcode INTEGER," +
                 "pvname TEXT)");
 
+        db.execSQL("CREATE TABLE " + SCHEME_TABLE_NAME + " ("
+                + "id TEXT," +
+                "name TEXT)");
+
         db.execSQL("CREATE TABLE " + HABITATION_TABLE_NAME + " ("
                 + "dcode TEXT," +
                 "bcode TEXT," +
                 "pvcode TEXT," +
                 "habitation_code TEXT," +
                 "habitation_name TEXT)");
+
+        db.execSQL("CREATE TABLE " + STREET_TABLE_NAME + " ("
+                + "dcode TEXT," +
+                "bcode TEXT," +
+                "pvcode TEXT," +
+                "hab_code TEXT," +
+                "street_code TEXT," +
+                "street_name_t TEXT)");
 
         db.execSQL("CREATE TABLE " + USER_LIST_VILLAGE_WISE + " ("
                 + "dcode INTEGER," +
@@ -51,11 +65,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "type_of_id_number TEXT)");
 
         db.execSQL("CREATE TABLE " + SAVE_WATER_CONN_DETAILS + " ("
-                + "dcode INTEGER," +
-                "bcode INTEGER," +
-                "pvcode INTEGER," +
-                "hab_code INTEGER," +
-                "edit_id INTEGER," +
+                +"pvcode TEXT," +
+                "hab_code TEXT," +
+                "street_code TEXT," +
+                "edit_id TEXT," +
                 "water_conn_available TEXT," +
                 "is_approved TEXT," +
                 "scheme_id TEXT)");

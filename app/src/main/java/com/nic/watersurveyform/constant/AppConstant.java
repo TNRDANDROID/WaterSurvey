@@ -27,12 +27,18 @@ public class AppConstant {
     public static String USER_DATA = "user_data";
 
     public static String DISTRICT_CODE = "dcode";
+    public static String SCHEME_ID = "id";
+    public static String SCHEME = "scheme_id";
+    public static String SCHEME_NAME = "name";
     public static String DISTRICT_NAME = "dname";
 
     public static String RO_DISTRICT_CODE = "district_code";
     public static String RO_DISTRICT_NAME = "district_name";
 
     public static String BLOCK_CODE = "bcode";
+    public static String WATER_CONNECTION_AVAILABLE = "water_conn_available";
+    public static String WATER_CONNECTION_APPROVED = "is_approved";
+
     public static String PV_CODE = "pvcode";
     public static String BLOCK_NAME = "bname";
     public static String PV_NAME = "pvname";
@@ -42,6 +48,8 @@ public class AppConstant {
 
     public static String HABB_CODE = "habitation_code";
     public static String HAB_CODE = "hab_code";
+    public static String STREET_CODE = "street_code";
+    public static String STREET_NAME_TAMIL = "street_name_t";
     public static String HABITATION_NAME = "habitation_name";
 
     public static String EDIT_ID = "edit_id";
@@ -57,5 +65,8 @@ public class AppConstant {
     public static String KEY_HABITATION_LIST_DISTRICT_BLOCK_WISE = "habitation_list_district_block_wise";
     public static String KEY_SCHEME_LIST = "bna_sanitation_survey_scheme";
     public static String KEY_BNA_SANITATION_SURVEY = "bna_sanitation_survey";
+    public static String KEY_HAB_WISE_STREET_LIST = "hab_wise_street_list";
+    public static String KEY_BNA_SANITATION_WATER_CONN_SAVE = "bna_sanitation_water_conn_save";
+    public static String KEY_TRACK_DATA = "track_data";
 
 }

@@ -1,21 +1,18 @@
 package com.nic.watersurveyform.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,31 +20,34 @@ import androidx.databinding.DataBindingUtil;
 
 import com.android.volley.VolleyError;
 import com.nic.watersurveyform.DataBase.DBHelper;
+import com.nic.watersurveyform.DataBase.dbData;
 import com.nic.watersurveyform.R;
 import com.nic.watersurveyform.Session.PrefManager;
+import com.nic.watersurveyform.adapter.CommonAdapter;
 import com.nic.watersurveyform.api.Api;
-import com.nic.watersurveyform.api.ApiService;
 import com.nic.watersurveyform.api.ServerResponse;
 import com.nic.watersurveyform.constant.AppConstant;
-import com.nic.watersurveyform.databinding.WaterConnectionBinding;
+import com.nic.watersurveyform.databinding.WaterConnectionScreenBinding;
 import com.nic.watersurveyform.dialog.MyDialog;
+import com.nic.watersurveyform.pojo.WaterSurveyForm;
+import com.nic.watersurveyform.support.ProgressHUD;
+import com.nic.watersurveyform.utils.Utils;
+import com.nic.watersurveyform.windowpreferences.WindowPreferencesManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.nic.watersurveyform.DataBase.dbData;
-import com.nic.watersurveyform.pojo.WaterSurveyForm;
-import com.nic.watersurveyform.support.ProgressHUD;
-import com.nic.watersurveyform.utils.UrlGenerator;
-import com.nic.watersurveyform.utils.Utils;
 
-import static com.nic.watersurveyform.utils.Utils.*;
+import es.dmoral.toasty.Toasty;
 
-public class WaterConnection extends AppCompatActivity implements Api.ServerResponseListener, View.OnClickListener, MyDialog.myOnClickListener {
-    private WaterConnectionBinding waterConnectionBinding;
+import static com.nic.watersurveyform.utils.Utils.decrypt;
+import static com.nic.watersurveyform.utils.Utils.showAlert;
+
+public class WaterConnection extends AppCompatActivity implements Api.ServerResponseListener, View.OnClickListener {
+    //    private WaterConnectionBinding waterConnectionBinding;
+    private WaterConnectionScreenBinding waterConnectionScreenBinding;
     private PrefManager prefManager;
     public dbData dbData = new dbData(this);
     public static DBHelper dbHelper;
@@ -57,8 +57,10 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
     private List<WaterSurveyForm> Village = new ArrayList<>();
     private List<WaterSurveyForm> Habitation = new ArrayList<>();
     String lastInsertedID;
-    String isAlive = "", isLegal = "", isMigrated = "";
+    String isWaterConnection = "", isApproved = "", isScheme = "";
     private ProgressHUD progressHUD;
+    private List<WaterSurveyForm> Scheme = new ArrayList<>();
+    JSONObject datasetActivity = new JSONObject();
 
 
     String pref_Village;
@@ -67,8 +69,10 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        waterConnectionBinding = DataBindingUtil.setContentView(this, R.layout.water_connection);
-        waterConnectionBinding.setActivity(this);
+        waterConnectionScreenBinding = DataBindingUtil.setContentView(this, R.layout.water_connection_screen);
+        waterConnectionScreenBinding.setActivity(this);
+        WindowPreferencesManager windowPreferencesManager = new WindowPreferencesManager(this);
+        windowPreferencesManager.applyEdgeToEdgePreference(getWindow());
         prefManager = new PrefManager(this);
         try {
             dbHelper = new DBHelper(this);
@@ -81,74 +85,121 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
             isHome = bundle.getString("Home");
         }
 
-        waterConnectionBinding.available.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        waterConnectionScreenBinding.available.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean Y) {
-                if(Y) {
-                    waterConnectionBinding.notAvailable.setChecked(false);
-                    waterConnectionBinding.approvedTv.setVisibility(View.VISIBLE);
-                    waterConnectionBinding.approvalLayout.setVisibility(View.VISIBLE);
-                }
-                else {
-                    waterConnectionBinding.approvedTv.setVisibility(View.GONE);
-                    waterConnectionBinding.approvalLayout.setVisibility(View.GONE);
+                if (Y) {
+                    isWaterConnection = "Y";
+                    waterConnectionScreenBinding.notAvailable.setChecked(false);
+                    waterConnectionScreenBinding.ifApproved.setChecked(false);
+                    waterConnectionScreenBinding.notApproved.setChecked(false);
+                    waterConnectionScreenBinding.approvedTv.setVisibility(View.VISIBLE);
+                    waterConnectionScreenBinding.approvalLayout.setVisibility(View.VISIBLE);
+                } else {
+                    waterConnectionScreenBinding.approvedTv.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.approvalLayout.setVisibility(View.GONE);
                 }
 
             }
         });
 
-        waterConnectionBinding.notAvailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        waterConnectionScreenBinding.notAvailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean N) {
-                if(N) {
-                    waterConnectionBinding.available.setChecked(false);
-                    waterConnectionBinding.approvedTv.setVisibility(View.GONE);
-                    waterConnectionBinding.approvalLayout.setVisibility(View.GONE);
-                    waterConnectionBinding.ifApproved.setChecked(false);
-                    waterConnectionBinding.schemeTv.setVisibility(View.GONE);
-                    waterConnectionBinding.schemeLayout.setVisibility(View.GONE);
+                if (N) {
+                    isWaterConnection = "N";
+                    waterConnectionScreenBinding.available.setChecked(false);
+                    waterConnectionScreenBinding.approvedTv.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.approvalLayout.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.ifApproved.setChecked(false);
+                    waterConnectionScreenBinding.notApproved.setChecked(false);
+                    waterConnectionScreenBinding.ifApproved.setChecked(false);
+                    waterConnectionScreenBinding.schemeTv.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.schemeLayout.setVisibility(View.GONE);
                 }
 
             }
         });
-        waterConnectionBinding.ifApproved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        waterConnectionScreenBinding.ifApproved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean Y) {
-                if(Y) {
-                    waterConnectionBinding.notApproved.setChecked(false);
-                    waterConnectionBinding.schemeTv.setVisibility(View.VISIBLE);
-                    waterConnectionBinding.schemeLayout.setVisibility(View.VISIBLE);
-                }
-                else {
-                    waterConnectionBinding.schemeTv.setVisibility(View.GONE);
-                    waterConnectionBinding.schemeLayout.setVisibility(View.GONE);
+                if (Y) {
+                    isApproved = "Y";
+                    waterConnectionScreenBinding.notApproved.setChecked(false);
+                    waterConnectionScreenBinding.schemeTv.setVisibility(View.VISIBLE);
+                    waterConnectionScreenBinding.schemeLayout.setVisibility(View.VISIBLE);
+                    schemeFilterSpinner();
+                } else {
+                    waterConnectionScreenBinding.schemeTv.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.schemeLayout.setVisibility(View.GONE);
                 }
 
             }
         });
 
-        waterConnectionBinding.notApproved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        waterConnectionScreenBinding.notApproved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean N) {
-                if(N) {
-                    waterConnectionBinding.ifApproved.setChecked(false);
-                    waterConnectionBinding.schemeTv.setVisibility(View.GONE);
-                    waterConnectionBinding.schemeLayout.setVisibility(View.GONE);
+                if (N) {
+                    isApproved = "N";
+                    waterConnectionScreenBinding.ifApproved.setChecked(false);
+                    waterConnectionScreenBinding.schemeTv.setVisibility(View.GONE);
+                    waterConnectionScreenBinding.schemeLayout.setVisibility(View.GONE);
                 }
 
             }
         });
-        syncButtonVisibility();
+
+        waterConnectionScreenBinding.schemeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    isScheme = "Y";
+                    prefManager.setSchemeId(Scheme.get(position).getSchemeID());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+        waterConnectionScreenBinding.nameOfFamilyHead.setText(getIntent().getStringExtra(AppConstant.NAME_OF_FAMILY_HEAD));
+        waterConnectionScreenBinding.familyHeadTitle.setText(getIntent().getStringExtra(AppConstant.FAMILY_HEAD_TITLE));
+        waterConnectionScreenBinding.fatherHusbandName.setText(getIntent().getStringExtra(AppConstant.FATHER_HUSBAND_NAME));
+
+
     }
 
 
-    public void validateYesNo() {
-        if (isAlive.equalsIgnoreCase("Y")) {
-            isLegal = "";
+    public void schemeFilterSpinner() {
+        Cursor whichScheme = null;
+        String schemeQuery = "SELECT * FROM " + DBHelper.SCHEME_TABLE_NAME + " order by name asc";
+//        HABList = db.rawQuery("SELECT * FROM " + DBHelper.STREET_TABLE_NAME + " where dcode = '" + dcode + "'and bcode = '" + bcode + "' and pvcode = '" + pvcode + "' and habcode = '" + habcode + "' order by habitation_name asc", null);
+        whichScheme = db.rawQuery(schemeQuery, null);
+        Log.d("Streetque", "" + schemeQuery);
+        Scheme.clear();
+        WaterSurveyForm habitationListValue = new WaterSurveyForm();
+        habitationListValue.setSchemeName("Select Scheme");
+        Scheme.add(habitationListValue);
+        if (whichScheme.getCount() > 0) {
+            if (whichScheme.moveToFirst()) {
+                do {
+                    WaterSurveyForm scheme = new WaterSurveyForm();
+                    String schemeID = whichScheme.getString(whichScheme.getColumnIndexOrThrow(AppConstant.SCHEME_ID));
+                    String schemeName = whichScheme.getString(whichScheme.getColumnIndexOrThrow(AppConstant.SCHEME_NAME));
+
+                    scheme.setSchemeID(schemeID);
+                    scheme.setSchemeName(schemeName);
+
+
+                    Scheme.add(scheme);
+                    Log.d("spinnersize", "" + Scheme.size());
+                } while (whichScheme.moveToNext());
+            }
         }
-        if (isAlive.equalsIgnoreCase("N") && isLegal.equalsIgnoreCase("N")) {
-            isMigrated = "";
-        }
+        waterConnectionScreenBinding.schemeSpinner.setAdapter(new CommonAdapter(this, Scheme, "SchemeList"));
     }
 
 
@@ -184,40 +235,70 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
     @Override
     protected void onResume() {
         super.onResume();
-        syncButtonVisibility();
+
     }
 
 
-    public void viewServerData() {
-//        homeScreenBinding.viewServerData.setVisibility(View.VISIBLE);
-//        homeScreenBinding.viewServerData.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isOnline()) {
-//                    getPMAYList();
-//                } else {
-//                    showAlert(HomePage.this, "Your Internet seems to be Offline.Data can be viewed only in Online mode.");
-//                }
-//            }
-//        });
+    public void validate() {
+        if ((waterConnectionScreenBinding.available.isChecked()) || (waterConnectionScreenBinding.notAvailable.isChecked())) {
+            if (isWaterConnection.equalsIgnoreCase("Y")) {
+                if ((waterConnectionScreenBinding.ifApproved.isChecked()) || (waterConnectionScreenBinding.notApproved.isChecked())) {
+                    if (isApproved.equalsIgnoreCase("Y")) {
+                        if (!"Select Scheme".equalsIgnoreCase(Scheme.get(waterConnectionScreenBinding.schemeSpinner.getSelectedItemPosition()).getSchemeName())) {
+                            insertUserDetails();
+                        } else {
+                            Utils.showAlert(this, "Select Scheme!");
+                        }
+                    } else {
+                        insertUserDetails();
+                    }
+                } else {
+                    Utils.showAlert(this, "ஆம் ’ எனில் அனுமதி பெற்ற குடிநீர் இணைப்பா என்பதை சரிபார்க்கவும்?");
+                }
+            } else {
+                insertUserDetails();
+            }
+        } else {
+            Utils.showAlert(this, "வீட்டுக்கான குடிநீர் இணைப்பு பெறப்பட்டுள்ளதா என்பதை சரிபார்க்கவும்?");
+        }
     }
 
-    public void getPMAYList() {
-//        try {
-//            new ApiService(this).makeJSONObjectRequest("PMAYList", Api.Method.POST, UrlGenerator.getPMAYListUrl(), pmayListJsonParams(), "not cache", this);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+    public void validateYesNo() {
+
     }
 
-  //  public JSONObject pmayListJsonParams() throws JSONException {
-//        String authKey = encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.pmayListJsonParams().toString());
-//        JSONObject dataSet = new JSONObject();
-//        dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
-//        dataSet.put(AppConstant.DATA_CONTENT, authKey);
-//        Log.d("PMAYList", "" + authKey);
-//        return dataSet;
-  //  }
+    public void insertUserDetails() {
+        dbData.open();
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(AppConstant.EDIT_ID, getIntent().getStringExtra(AppConstant.EDIT_ID));
+            values.put(AppConstant.PV_CODE, getIntent().getStringExtra(AppConstant.PV_CODE));
+            values.put(AppConstant.HAB_CODE, getIntent().getStringExtra(AppConstant.HAB_CODE));
+            values.put(AppConstant.STREET_CODE, prefManager.getStreetCode());
+            if (isScheme.equalsIgnoreCase("Y")) {
+                values.put(AppConstant.SCHEME, prefManager.getSchemeId());
+            } else {
+                values.put(AppConstant.SCHEME, "");
+            }
+            values.put(AppConstant.WATER_CONNECTION_AVAILABLE, isWaterConnection);
+            values.put(AppConstant.WATER_CONNECTION_APPROVED, isApproved);
+            long id = db.insert(DBHelper.SAVE_WATER_CONN_DETAILS, null, values);
+
+            if (id > 0) {
+                Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();
+                super.onBackPressed();
+                overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public void OnMyResponse(ServerResponse serverResponse) {
@@ -226,14 +307,17 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
             String urlType = serverResponse.getApi();
             JSONObject responseObj = serverResponse.getJsonResponse();
 
-            if ("PMAYList".equals(urlType) && responseObj != null) {
+            if ("saveWaterConnection".equals(urlType) && responseObj != null) {
                 String key = responseObj.getString(AppConstant.ENCODE_DATA);
                 String responseDecryptedBlockKey = decrypt(prefManager.getUserPassKey(), key);
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-                  //  new InsertPMAYTask().execute(jsonObject);
-                }else if(jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD") && jsonObject.getString("MESSAGE").equalsIgnoreCase("NO_RECORD")){
-                    showAlert(this,"No Record Found!");
+                    Utils.showAlert(this, "Uploaded");
+                    db.delete(DBHelper.SAVE_WATER_CONN_DETAILS, "edit_id = ?", new String[]{prefManager.getKeyDeleteId()});
+//                     new fetchPendingtask().execute();
+//                    pendingAdapter.notifyDataSetChanged();
+                } else if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("NO_RECORD") && jsonObject.getString("MESSAGE").equalsIgnoreCase("NO_RECORD")) {
+                    showAlert(this, "No Record Found!");
                 }
 
             }
@@ -254,37 +338,10 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
     }
 
 
-
     public void closeApplication() {
         new MyDialog(this).exitDialog(this, "Are you sure you want to Logout?", "Logout");
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                new MyDialog(this).exitDialog(this, "Are you sure you want to exit ?", "Exit");
-                return false;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onButtonClick(AlertDialog alertDialog, String type) {
-        alertDialog.dismiss();
-        if ("Exit".equalsIgnoreCase(type)) {
-            onBackPressed();
-        } else {
-
-            Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra("EXIT", false);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
-        }
-    }
 
 //    public void validateFields() {
 //        if (!"Select Village".equalsIgnoreCase(Village.get(homeScreenBinding.villageSpinner.getSelectedItemPosition()).getPvName())) {
@@ -328,47 +385,6 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
 //
 //    }
 
-    public void checkLegalYesNo() {
-//        if ((isLegal.equalsIgnoreCase("N"))) {
-//            takePhoto(homeScreenBinding.takePhotoTv.getText().toString());
-//        } else {
-//            if ((homeScreenBinding.migYes.isChecked()) || homeScreenBinding.migNo.isChecked()) {
-//                takePhoto(homeScreenBinding.takePhotoTv.getText().toString());
-//            } else {
-//                showAlert(this, "Check the beneficiary is Migrated or not!");
-//            }
-//        }
-    }
-
-
-    public void syncButtonVisibility() {
-//        dbData.open();
-//        ArrayList<PMAYSurvey> workImageCount = dbData.getSavedPMAYDetails();
-//
-//        if (workImageCount.size() > 0) {
-//            homeScreenBinding.synData.setVisibility(View.VISIBLE);
-//        }else {
-//            homeScreenBinding.synData.setVisibility(View.GONE);
-//        }
-    }
-
-    public void emptyValue() {
-//        homeScreenBinding.villageSpinner.setSelection(0);
-//        homeScreenBinding.habitationSpinner.setSelection(0);
-//        homeScreenBinding.fatherName.setText("");
-//        homeScreenBinding.name.setText("");
-//        homeScreenBinding.seccId.setText("");
-//        homeScreenBinding.aliveYes.setChecked(false);
-//        homeScreenBinding.aliveNo.setChecked(false);
-//        homeScreenBinding.legalYes.setChecked(false);
-//        homeScreenBinding.legalNo.setChecked(false);
-//        homeScreenBinding.migYes.setChecked(false);
-//        homeScreenBinding.migNo.setChecked(false);
-        isLegal = "";
-        isAlive = "";
-        isMigrated = "";
-
-    }
 
     public void openPendingScreen() {
 //        Intent intent = new Intent(this, PendingScreen.class);
@@ -433,4 +449,13 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
 //        }
 //    }
 
+
+    public void homePage() {
+        Intent intent = new Intent(this, HomePage.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Home", "Home");
+        startActivity(intent);
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
+    }
 }

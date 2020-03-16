@@ -331,6 +331,18 @@ public class Utils {
         return dataSet;
     }
 
+    public static JSONObject streetListDistrictBlockVillageWiseJsonParams(Activity activity) throws JSONException {
+        prefManager = new PrefManager(activity);
+        JSONObject dataSet = new JSONObject();
+        dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_HAB_WISE_STREET_LIST);
+        dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+        dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
+        dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
+        dataSet.put(AppConstant.HAB_CODE, prefManager.getKeyHabCode());
+        Log.d("StreetListDistBlock", "" + dataSet);
+        return dataSet;
+    }
+
     public static JSONObject SchemeListJsonParams() throws JSONException {
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_SCHEME_LIST);
@@ -345,6 +357,8 @@ public class Utils {
         dataSet.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
         dataSet.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
         dataSet.put(AppConstant.PV_CODE, prefManager.getPvCode());
+        dataSet.put("habcode", prefManager.getKeyHabCode());
+        dataSet.put(AppConstant.STREET_CODE, prefManager.getStreetCode());
         Log.d("SurveyVillageParams_obj", "" + dataSet);
         return dataSet;
     }

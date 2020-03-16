@@ -11,6 +11,33 @@ public class WaterSurveyForm {
 
     private String blockCode;
 
+    public String getWaterConnAvailable() {
+        return waterConnAvailable;
+    }
+
+    public void setWaterConnAvailable(String waterConnAvailable) {
+        this.waterConnAvailable = waterConnAvailable;
+    }
+
+    public String getWaterConnApproved() {
+        return waterConnApproved;
+    }
+
+    public void setWaterConnApproved(String waterConnApproved) {
+        this.waterConnApproved = waterConnApproved;
+    }
+
+    private String waterConnAvailable;
+    private String waterConnApproved;
+
+    public String getSchemeName() {
+        return SchemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        SchemeName = schemeName;
+    }
+
     private String SchemeName;
 
     private String selectedBlockCode;
@@ -37,6 +64,35 @@ public class WaterSurveyForm {
     private String fatherHusbandName;
     private String typeOfId;
     private String typeOfIdNUmber;
+    private String streetCode;
+
+    public String getSchemeID() {
+        return SchemeID;
+    }
+
+    public void setSchemeID(String schemeID) {
+        SchemeID = schemeID;
+    }
+
+    private String SchemeID;
+
+    public String getStreetCode() {
+        return streetCode;
+    }
+
+    public void setStreetCode(String streetCode) {
+        this.streetCode = streetCode;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    private String streetName;
 
     public String getTypeOfId() {
         return typeOfId;

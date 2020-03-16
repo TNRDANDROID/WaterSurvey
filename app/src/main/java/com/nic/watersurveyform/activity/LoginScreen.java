@@ -308,7 +308,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                 String responseDecryptedBlockKey = Utils.decrypt(prefManager.getUserPassKey(), key);
                 JSONObject jsonObject = new JSONObject(responseDecryptedBlockKey);
                 if (jsonObject.getString("STATUS").equalsIgnoreCase("OK") && jsonObject.getString("RESPONSE").equalsIgnoreCase("OK")) {
-                  //  new InsertHabTask().execute(jsonObject);
+                    new InsertSchemeTask().execute(jsonObject);
                 }
                 Log.d("SchemeList", "" + responseDecryptedBlockKey);
             }
@@ -338,7 +338,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
     public void getSchemeList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getServicesListUrl(), schemeListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getWaterSurveyVillageUrl(), schemeListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -362,7 +362,6 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         Log.d("HabitationList", "" + authKey);
         return dataSet;
     }
-
     public JSONObject schemeListJsonParams() throws JSONException {
         String authKey = Utils.encrypt(prefManager.getUserPassKey(), getResources().getString(R.string.init_vector), Utils.SchemeListJsonParams().toString());
         JSONObject dataSet = new JSONObject();
@@ -457,6 +456,42 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         }
     }
+
+    public class InsertSchemeTask extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected Void doInBackground(JSONObject... params) {
+            dbData.open();
+            ArrayList<WaterSurveyForm> schemelistcount = dbData.getAllScheme();
+            if (schemelistcount.size() <= 0) {
+                if (params.length > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    try {
+                        jsonArray = params[0].getJSONArray(AppConstant.JSON_DATA);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        WaterSurveyForm schemeListValue = new WaterSurveyForm();
+                        try {
+                            schemeListValue.setSchemeID(jsonArray.getJSONObject(i).getString(AppConstant.SCHEME_ID));
+                            schemeListValue.setSchemeName(jsonArray.getJSONObject(i).getString(AppConstant.SCHEME_NAME));
+
+                            dbData.insertScheme(schemeListValue);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+
+
+        }
+    }
+
 
     private void showHomeScreen() {
         Intent intent = new Intent(LoginScreen.this, HomePage.class);

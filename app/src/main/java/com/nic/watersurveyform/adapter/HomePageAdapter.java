@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.nic.watersurveyform.R;
 import com.nic.watersurveyform.Session.PrefManager;
 import com.nic.watersurveyform.activity.WaterConnection;
-import com.nic.watersurveyform.databinding.HomePageAdapterBinding;
+import com.nic.watersurveyform.constant.AppConstant;
+import com.nic.watersurveyform.databinding.AdapterUserListBinding;
 import com.nic.watersurveyform.pojo.WaterSurveyForm;
 
 import org.json.JSONObject;
@@ -43,31 +44,32 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
-        HomePageAdapterBinding homePageAdapterBinding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.home_page_adapter, viewGroup, false);
-        return new HomePageAdapter.MyViewHolder(homePageAdapterBinding);
+        AdapterUserListBinding adapterUserListBinding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.adapter_user_list, viewGroup, false);
+        return new HomePageAdapter.MyViewHolder(adapterUserListBinding);
 
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private HomePageAdapterBinding homePageAdapterBinding;
+        //        private HomePageAdapterBinding adapterUserListBinding;
+        private AdapterUserListBinding adapterUserListBinding;
 
-        public MyViewHolder(HomePageAdapterBinding Binding) {
+        public MyViewHolder(AdapterUserListBinding Binding) {
             super(Binding.getRoot());
-            homePageAdapterBinding = Binding;
+            adapterUserListBinding = Binding;
         }
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        holder.homePageAdapterBinding.nameofFamilyHead.setText(userListValues.get(position).getNameOfFamilyHead());
-        holder.homePageAdapterBinding.fatherHusbandName.setText(userListValues.get(position).getFatherHusbandName());
-        holder.homePageAdapterBinding.idCardType.setText(userListValues.get(position).getTypeOfId()+ " ("+userListValues.get(position).getTypeOfIdNUmber()+")");
+        holder.adapterUserListBinding.nameofFamilyHead.setText(userListValues.get(position).getNameOfFamilyHead());
+        holder.adapterUserListBinding.fatherHusbandName.setText(userListValues.get(position).getFatherHusbandName());
+        holder.adapterUserListBinding.idCardType.setText(userListValues.get(position).getTypeOfId() + " (" + userListValues.get(position).getTypeOfIdNUmber() + ")");
 
 
-        holder.homePageAdapterBinding.userLayout.setOnClickListener(new View.OnClickListener() {
+        holder.adapterUserListBinding.userLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openWaterSurvey(position);
@@ -78,9 +80,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MyView
     public void openWaterSurvey(int pos) {
         Activity activity = (Activity) context;
         Intent intent = new Intent(activity, WaterConnection.class);
-//        intent.putExtra(AppConstant.PV_CODE, serverDataListValuesFiltered.get(pos).getPvCode());
-//        intent.putExtra(AppConstant.HAB_CODE, serverDataListValuesFiltered.get(pos).getHabCode());
-//        intent.putExtra(AppConstant.SECC_ID, serverDataListValuesFiltered.get(pos).getSeccId());
+        intent.putExtra(AppConstant.EDIT_ID, userListValues.get(pos).getEditId());
+        intent.putExtra(AppConstant.PV_CODE, userListValues.get(pos).getPvCode());
+        intent.putExtra(AppConstant.HAB_CODE, userListValues.get(pos).getHabCode());
+        intent.putExtra(AppConstant.NAME_OF_FAMILY_HEAD, userListValues.get(pos).getNameOfFamilyHead());
+        intent.putExtra(AppConstant.FAMILY_HEAD_TITLE, userListValues.get(pos).getFamilyHeadTitle());
+        intent.putExtra(AppConstant.FATHER_HUSBAND_NAME, userListValues.get(pos).getFatherHusbandName());
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }

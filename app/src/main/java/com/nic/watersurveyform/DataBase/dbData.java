@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteReadOnlyDatabaseException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import com.nic.watersurveyform.constant.AppConstant;
@@ -103,7 +106,24 @@ public class dbData {
 
         return pmgsySurvey;
     }
-    public ArrayList<WaterSurveyForm > getAll_Habitation(String dcode,String bcode) {
+
+    public WaterSurveyForm insertStreet(WaterSurveyForm pmgsySurvey) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.DISTRICT_CODE, pmgsySurvey.getDistictCode());
+        values.put(AppConstant.BLOCK_CODE, pmgsySurvey.getBlockCode());
+        values.put(AppConstant.PV_CODE, pmgsySurvey.getPvCode());
+        values.put(AppConstant.HAB_CODE, pmgsySurvey.getHabCode());
+        values.put(AppConstant.STREET_CODE, pmgsySurvey.getStreetCode());
+        values.put(AppConstant.STREET_NAME_TAMIL, pmgsySurvey.getStreetName());
+
+        long id = db.insert(DBHelper.STREET_TABLE_NAME, null, values);
+        Log.d("Inserted_id_street", String.valueOf(id));
+
+        return pmgsySurvey;
+    }
+
+    public ArrayList<WaterSurveyForm> getAll_Habitation(String dcode, String bcode) {
 
         ArrayList<WaterSurveyForm > cards = new ArrayList<>();
         Cursor cursor = null;
@@ -125,6 +145,44 @@ public class dbData {
                             .getColumnIndexOrThrow(AppConstant.HABB_CODE)));
                     card.setHabitationName(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.HABITATION_NAME)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+    public ArrayList<WaterSurveyForm> getAll_Street() {
+
+        ArrayList<WaterSurveyForm> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.STREET_TABLE_NAME + "  order by street_name_t asc", null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    WaterSurveyForm card = new WaterSurveyForm();
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setHabCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.HAB_CODE)));
+                    card.setStreetCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.STREET_CODE)));
+                    card.setStreetName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.STREET_NAME_TAMIL)));
 
                     cards.add(card);
                 }
@@ -242,6 +300,101 @@ public class dbData {
                     cards.add(card);
                 }
             }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+    public WaterSurveyForm insertScheme(WaterSurveyForm pmgsySurvey) {
+
+        ContentValues values = new ContentValues();
+        values.put(AppConstant.SCHEME_ID, pmgsySurvey.getSchemeID());
+        values.put(AppConstant.SCHEME_NAME, pmgsySurvey.getSchemeName());
+
+
+        long id = db.insert(DBHelper.SCHEME_TABLE_NAME, null, values);
+        Log.d("Inserted_id_scheme", String.valueOf(id));
+
+        return pmgsySurvey;
+    }
+
+    public ArrayList<WaterSurveyForm> getAllScheme() {
+
+        ArrayList<WaterSurveyForm> cards = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("select * from " + DBHelper.SCHEME_TABLE_NAME + " order by name asc", null);
+            // cursor = db.query(CardsDBHelper.TABLE_CARDS,
+            //       COLUMNS, null, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    WaterSurveyForm card = new WaterSurveyForm();
+                    card.setSchemeID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.SCHEME_ID)));
+                    card.setSchemeName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.SCHEME_NAME)));
+
+                    cards.add(card);
+                }
+            }
+        } catch (Exception e) {
+            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return cards;
+    }
+
+
+
+    public ArrayList<WaterSurveyForm> getSavedUserDetails(String purpose,String pvcode,String habcode,String edit_id) {
+
+        ArrayList<WaterSurveyForm> cards = new ArrayList<>();
+        Cursor cursor = null;
+        String selection = "server_flag = ? ";
+        String[] selectionArgs = new String[]{"0"};
+
+        if(purpose.equalsIgnoreCase("upload")) {
+            selection = "server_flag = ? and pvcode = ? and habcode = ? and edit_id = ?";
+            selectionArgs = new String[]{"0",pvcode,habcode,edit_id};
+        }
+
+
+
+
+        try {
+            cursor = db.query(DBHelper.SAVE_WATER_CONN_DETAILS,
+                    new String[]{"*"}, selection, selectionArgs, null, null, null);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+
+                    WaterSurveyForm card = new WaterSurveyForm();
+
+                    card.setPvCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.PV_CODE)));
+                    card.setHabCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.HAB_CODE)));
+                    card.setStreetCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.STREET_CODE)));
+                    card.setEditId(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.EDIT_ID)));
+                    card.setWaterConnAvailable(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WATER_CONNECTION_AVAILABLE)));
+                    card.setWaterConnApproved(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.WATER_CONNECTION_APPROVED)));
+                    card.setSchemeID(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.SCHEME_ID)));
+                    cards.add(card);
+                }
+            }
         } catch (Exception e){
             //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
         } finally{
@@ -253,13 +406,23 @@ public class dbData {
     }
 
 
+
     public void deleteAllTables(){
         deleteVillageTable();
         deleteHabitationTable();
     }
 
+
     public void deleteVillageTable() {
         db.execSQL("delete from " + DBHelper.VILLAGE_TABLE_NAME);
+    }
+
+    public void deleteUserTable() {
+        db.execSQL("delete from " + DBHelper.USER_LIST_VILLAGE_WISE);
+    }
+
+    public void deleteStreetTable() {
+        db.execSQL("delete from " + DBHelper.STREET_TABLE_NAME);
     }
     public void deleteHabitationTable() {
         db.execSQL("delete from " + DBHelper.HABITATION_TABLE_NAME);
