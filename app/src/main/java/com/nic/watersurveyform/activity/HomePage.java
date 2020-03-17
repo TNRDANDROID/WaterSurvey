@@ -108,6 +108,8 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.streetLayout.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1400).start();
         homePageBinding.saveLayout.animate().translationY(0).alpha(1).setDuration(2000).setStartDelay(1700).start();
 
+        syncButtonVisibility();
+
 //
 //        handler.postDelayed(new Runnable() {
 //            @Override
@@ -279,7 +281,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
             }
         }
         homePageBinding.streetSpinner.setAdapter(new CommonAdapter(this, Street, "StreetList"));
-        syncButtonVisibility();
+      //  syncButtonVisibility();
     }
 
 
@@ -293,7 +295,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
 
     public void getStreetList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("StreetList", Api.Method.POST, UrlGenerator.getWaterSurveyVillageUrl(), streetListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("StreetList", Api.Method.POST, UrlGenerator.getWaterSurveyMainUrl(), streetListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -302,7 +304,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
 
     public void getWaterSurveyListVillageWise() {
         try {
-            new ApiService(this).makeJSONObjectRequest("WaterSurveyVillageWise", Api.Method.POST, UrlGenerator.getWaterSurveyVillageUrl(), waterSurveyVillageJson(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("WaterSurveyVillageWise", Api.Method.POST, UrlGenerator.getWaterSurveyMainUrl(), waterSurveyVillageJson(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -338,7 +338,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
     public void getSchemeList() {
         try {
-            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getWaterSurveyVillageUrl(), schemeListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("SchemeList", Api.Method.POST, UrlGenerator.getWaterSurveyMainUrl(), schemeListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -474,8 +474,8 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                     for (int i = 0; i < jsonArray.length(); i++) {
                         WaterSurveyForm schemeListValue = new WaterSurveyForm();
                         try {
-                            schemeListValue.setSchemeID(jsonArray.getJSONObject(i).getString(AppConstant.SCHEME_ID));
-                            schemeListValue.setSchemeName(jsonArray.getJSONObject(i).getString(AppConstant.SCHEME_NAME));
+                            schemeListValue.setSchemeID(jsonArray.getJSONObject(i).getString("id"));
+                            schemeListValue.setSchemeName(jsonArray.getJSONObject(i).getString("name"));
 
                             dbData.insertScheme(schemeListValue);
                         } catch (JSONException e) {

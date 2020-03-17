@@ -108,6 +108,7 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
                     try {
                         jsonObject.put(AppConstant.PV_CODE, assets.get(i).getPvCode());
                         jsonObject.put(AppConstant.HAB_CODE, assets.get(i).getHabCode());
+                        jsonObject.put(AppConstant.STREET_CODE,assets.get(i).getStreetCode());
                         jsonObject.put(AppConstant.EDIT_ID, assets.get(i).getEditId());
                         jsonObject.put(AppConstant.SCHEME_ID, assets.get(i).getSchemeID());
                         jsonObject.put(AppConstant.WATER_CONNECTION_AVAILABLE, assets.get(i).getWaterConnAvailable());
@@ -121,7 +122,7 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
                 dataset = new JSONObject();
 
                 try {
-                    dataset.put(AppConstant.KEY_SERVICE_ID, "work_phy_stage_save");
+                    dataset.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_BNA_SANITATION_WATER_CONN_SAVE);
                     dataset.put(AppConstant.KEY_TRACK_DATA, track_data);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -140,7 +141,7 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
 
     public void syncData() {
         try {
-            new ApiService(this).makeJSONObjectRequest("saveUserDetails", Api.Method.POST, UrlGenerator.getWorkListUrl(), saveListJsonParams(), "not cache", this);
+            new ApiService(this).makeJSONObjectRequest("saveUserDetails", Api.Method.POST, UrlGenerator.getWaterSurveyMainUrl(), saveListJsonParams(), "not cache", this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -151,7 +152,8 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
         JSONObject dataSet = new JSONObject();
         dataSet.put(AppConstant.KEY_USER_NAME, prefManager.getUserName());
         dataSet.put(AppConstant.DATA_CONTENT, authKey);
-        Log.d("saveImage", "" + authKey);
+        Log.d("dataset",dataset.toString());
+        Log.d("saveUserDetails", "" + authKey);
         return dataSet;
     }
 

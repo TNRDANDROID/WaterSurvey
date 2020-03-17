@@ -34,8 +34,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "pvname TEXT)");
 
         db.execSQL("CREATE TABLE " + SCHEME_TABLE_NAME + " ("
-                + "id TEXT," +
-                "name TEXT)");
+                + "scheme_id TEXT," +
+                "scheme_name TEXT)");
 
         db.execSQL("CREATE TABLE " + HABITATION_TABLE_NAME + " ("
                 + "dcode TEXT," +
@@ -67,10 +67,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SAVE_WATER_CONN_DETAILS + " ("
                 +"pvcode TEXT," +
                 "hab_code TEXT," +
+                "dcode TEXT," +
+                "bcode TEXT," +
+                "name_of_family_head TEXT," +
                 "street_code TEXT," +
                 "edit_id TEXT," +
                 "water_conn_available TEXT," +
                 "is_approved TEXT," +
+                "scheme_name TEXT," +
                 "scheme_id TEXT)");
     }
 
@@ -79,7 +83,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion >= newVersion) {
             //drop table if already exists
             db.execSQL("DROP TABLE IF EXISTS " + VILLAGE_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + SCHEME_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + HABITATION_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + STREET_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + USER_LIST_VILLAGE_WISE);
+            db.execSQL("DROP TABLE IF EXISTS " + SAVE_WATER_CONN_DETAILS);
             onCreate(db);
         }
     }

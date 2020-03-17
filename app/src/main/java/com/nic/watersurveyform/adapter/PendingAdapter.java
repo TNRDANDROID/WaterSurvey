@@ -86,6 +86,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         } else {
             holder.pendingAdapterBinding.approvedLayout.setVisibility(View.GONE);
             holder.pendingAdapterBinding.schemeView.setVisibility(View.GONE);
+            holder.pendingAdapterBinding.approvedView.setVisibility(View.GONE);
         }
 
         if (pendingListValues.get(position).getWaterConnApproved().equalsIgnoreCase("Y")) {
@@ -93,6 +94,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             holder.pendingAdapterBinding.schemeName.setText(pendingListValues.get(position).getSchemeName());
         } else {
             holder.pendingAdapterBinding.schemeLayout.setVisibility(View.GONE);
+            holder.pendingAdapterBinding.schemeView.setVisibility(View.GONE);
         }
 
         final String dcode = pendingListValues.get(position).getDistictCode();

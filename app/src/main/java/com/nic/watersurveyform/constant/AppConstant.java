@@ -27,9 +27,8 @@ public class AppConstant {
     public static String USER_DATA = "user_data";
 
     public static String DISTRICT_CODE = "dcode";
-    public static String SCHEME_ID = "id";
-    public static String SCHEME = "scheme_id";
-    public static String SCHEME_NAME = "name";
+    public static String SCHEME_ID = "scheme_id";
+    public static String SCHEME_NAME = "scheme_name";
     public static String DISTRICT_NAME = "dname";
 
     public static String RO_DISTRICT_CODE = "district_code";

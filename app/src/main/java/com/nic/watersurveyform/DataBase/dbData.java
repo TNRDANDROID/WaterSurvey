@@ -359,16 +359,13 @@ public class dbData {
 
         ArrayList<WaterSurveyForm> cards = new ArrayList<>();
         Cursor cursor = null;
-        String selection = "server_flag = ? ";
-        String[] selectionArgs = new String[]{"0"};
+        String selection = null;
+        String[] selectionArgs = null;
 
         if(purpose.equalsIgnoreCase("upload")) {
-            selection = "server_flag = ? and pvcode = ? and habcode = ? and edit_id = ?";
-            selectionArgs = new String[]{"0",pvcode,habcode,edit_id};
+            selection = "pvcode = ? and hab_code = ? and edit_id = ?";
+            selectionArgs = new String[]{pvcode,habcode,edit_id};
         }
-
-
-
 
         try {
             cursor = db.query(DBHelper.SAVE_WATER_CONN_DETAILS,
@@ -378,12 +375,18 @@ public class dbData {
 
                     WaterSurveyForm card = new WaterSurveyForm();
 
+                    card.setDistictCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.DISTRICT_CODE)));
+                    card.setBlockCode(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.BLOCK_CODE)));
                     card.setPvCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.PV_CODE)));
                     card.setHabCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.HAB_CODE)));
                     card.setStreetCode(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.STREET_CODE)));
+                    card.setNameOfFamilyHead(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.NAME_OF_FAMILY_HEAD)));
                     card.setEditId(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.EDIT_ID)));
                     card.setWaterConnAvailable(cursor.getString(cursor
@@ -392,11 +395,13 @@ public class dbData {
                             .getColumnIndexOrThrow(AppConstant.WATER_CONNECTION_APPROVED)));
                     card.setSchemeID(cursor.getString(cursor
                             .getColumnIndexOrThrow(AppConstant.SCHEME_ID)));
+                    card.setSchemeName(cursor.getString(cursor
+                            .getColumnIndexOrThrow(AppConstant.SCHEME_NAME)));
                     cards.add(card);
                 }
             }
         } catch (Exception e){
-            //   Log.d(DEBUG_TAG, "Exception raised with a value of " + e);
+              Log.d("debug", "Exception raised with a value of " + e);
         } finally{
             if (cursor != null) {
                 cursor.close();

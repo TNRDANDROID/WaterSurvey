@@ -175,7 +175,7 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
 
     public void schemeFilterSpinner() {
         Cursor whichScheme = null;
-        String schemeQuery = "SELECT * FROM " + DBHelper.SCHEME_TABLE_NAME + " order by name asc";
+        String schemeQuery = "SELECT * FROM " + DBHelper.SCHEME_TABLE_NAME + " order by scheme_name asc";
 //        HABList = db.rawQuery("SELECT * FROM " + DBHelper.STREET_TABLE_NAME + " where dcode = '" + dcode + "'and bcode = '" + bcode + "' and pvcode = '" + pvcode + "' and habcode = '" + habcode + "' order by habitation_name asc", null);
         whichScheme = db.rawQuery(schemeQuery, null);
         Log.d("Streetque", "" + schemeQuery);
@@ -269,28 +269,38 @@ public class WaterConnection extends AppCompatActivity implements Api.ServerResp
 
     public void insertUserDetails() {
         dbData.open();
+        String edit_id = getIntent().getStringExtra(AppConstant.EDIT_ID);
 
         try {
             ContentValues values = new ContentValues();
-            values.put(AppConstant.EDIT_ID, getIntent().getStringExtra(AppConstant.EDIT_ID));
+            values.put(AppConstant.EDIT_ID, edit_id);
+            values.put(AppConstant.DISTRICT_CODE, prefManager.getDistrictCode());
+            values.put(AppConstant.BLOCK_CODE, prefManager.getBlockCode());
             values.put(AppConstant.PV_CODE, getIntent().getStringExtra(AppConstant.PV_CODE));
             values.put(AppConstant.HAB_CODE, getIntent().getStringExtra(AppConstant.HAB_CODE));
             values.put(AppConstant.STREET_CODE, prefManager.getStreetCode());
+            values.put(AppConstant.NAME_OF_FAMILY_HEAD, waterConnectionScreenBinding.nameOfFamilyHead.getText().toString());
             if (isScheme.equalsIgnoreCase("Y")) {
-                values.put(AppConstant.SCHEME, prefManager.getSchemeId());
+                values.put(AppConstant.SCHEME_ID, prefManager.getSchemeId());
+                values.put(AppConstant.SCHEME_NAME, Scheme.get(waterConnectionScreenBinding.schemeSpinner.getSelectedItemPosition()).getSchemeName());
             } else {
-                values.put(AppConstant.SCHEME, "");
+                values.put(AppConstant.SCHEME_ID, "");
+                values.put(AppConstant.SCHEME_NAME, "");
             }
             values.put(AppConstant.WATER_CONNECTION_AVAILABLE, isWaterConnection);
             values.put(AppConstant.WATER_CONNECTION_APPROVED, isApproved);
-            long id = db.insert(DBHelper.SAVE_WATER_CONN_DETAILS, null, values);
+            Cursor checkAvailableEditId = db.rawQuery("select * from "+DBHelper.SAVE_WATER_CONN_DETAILS+" where edit_id='"+edit_id+"'",null);
+            if(checkAvailableEditId.getCount()>0){
+                Utils.showAlert(this,"Entry Already exits in local database");
+            }else {
+                long id = db.insert(DBHelper.SAVE_WATER_CONN_DETAILS, null, values);
 
-            if (id > 0) {
-                Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();
-                super.onBackPressed();
-                overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
+                if (id > 0) {
+                    Toasty.success(this, "Success!", Toast.LENGTH_LONG, true).show();
+                    super.onBackPressed();
+                    overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit);
+                }
             }
-
 
         } catch (Exception e) {
 
