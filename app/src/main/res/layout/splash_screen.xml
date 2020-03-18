@@ -35,7 +35,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:background="@mipmap/app_logo"
+            android:background="@mipmap/tamilnadu_logo"
             android:textColor="#FFF"
             android:visibility="gone"
             android:textSize="22sp"/>
@@ -46,16 +46,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ivlogo"
-                android:text="RO Contacts"
+                android:text="WATER CONNECTION\n SURVEY"
                 style="@style/font_poppins_regular"
                 android:layout_centerInParent="true"
                 android:gravity="center_horizontal"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="#FFF"
-                android:textSize="44sp"
-                android:visibility="gone"
-                />
+                android:textAlignment="center"
+                android:textSize="@dimen/_20sdp"
+                 />
          </RelativeLayout>
 
 

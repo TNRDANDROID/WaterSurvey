@@ -415,6 +415,10 @@ public class dbData {
     public void deleteAllTables(){
         deleteVillageTable();
         deleteHabitationTable();
+        deleteStreetTable();
+        deleteUserTable();
+        deleteUserListTable();
+        deleteSchemeTable();
     }
 
 
@@ -429,8 +433,14 @@ public class dbData {
     public void deleteStreetTable() {
         db.execSQL("delete from " + DBHelper.STREET_TABLE_NAME);
     }
+    public void deleteUserListTable() {
+        db.execSQL("delete from " + DBHelper.SAVE_WATER_CONN_DETAILS);
+    }
     public void deleteHabitationTable() {
         db.execSQL("delete from " + DBHelper.HABITATION_TABLE_NAME);
+    }
+    public void deleteSchemeTable() {
+        db.execSQL("delete from " + DBHelper.SCHEME_TABLE_NAME);
     }
 
 

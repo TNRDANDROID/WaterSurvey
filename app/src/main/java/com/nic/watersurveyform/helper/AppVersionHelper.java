@@ -45,7 +45,7 @@ public class AppVersionHelper implements Api.ServerResponseListener {
         Map<String, String> params = new HashMap<>();
 
         params.put(AppConstant.KEY_SERVICE_ID, AppConstant.KEY_VERSION_CHECK);
-        params.put(AppConstant.KEY_APP_CODE, "RO");
+        params.put(AppConstant.KEY_APP_CODE, "WS");
 
         return params;
     }

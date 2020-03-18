@@ -30,6 +30,7 @@ import com.nic.watersurveyform.databinding.PendingScreenBinding;
 import com.nic.watersurveyform.pojo.WaterSurveyForm;
 import com.nic.watersurveyform.utils.UrlGenerator;
 import com.nic.watersurveyform.utils.Utils;
+import com.nic.watersurveyform.windowpreferences.WindowPreferencesManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +56,8 @@ public class PendingScreen extends AppCompatActivity implements Api.ServerRespon
         super.onCreate(savedInstanceState);
         pendingScreenBinding = DataBindingUtil.setContentView(this, R.layout.pending_screen);
         pendingScreenBinding.setActivity(this);
+        WindowPreferencesManager windowPreferencesManager = new WindowPreferencesManager(this);
+        windowPreferencesManager.applyEdgeToEdgePreference(getWindow());
         context = this;
         prefManager = new PrefManager(this);
         try {

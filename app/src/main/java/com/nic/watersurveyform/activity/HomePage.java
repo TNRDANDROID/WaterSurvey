@@ -91,6 +91,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.selectStreetTv.setTranslationX(800);
         homePageBinding.streetLayout.setTranslationX(800);
         homePageBinding.saveLayout.setTranslationY(800);
+        homePageBinding.syn.setTranslationZ(800);
 
 
         homePageBinding.selectVillageTv.setAlpha(0);
@@ -99,6 +100,7 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.habLayout.setAlpha(0);
         homePageBinding.selectStreetTv.setAlpha(0);
         homePageBinding.streetLayout.setAlpha(0);
+        homePageBinding.syn.setAlpha(0);
 
         homePageBinding.selectVillageTv.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(400).start();
         homePageBinding.villageLayout.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(600).start();
@@ -107,6 +109,10 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
         homePageBinding.selectStreetTv.animate().translationX(0).alpha(1).setDuration(1600).setStartDelay(1200).start();
         homePageBinding.streetLayout.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1400).start();
         homePageBinding.saveLayout.animate().translationY(0).alpha(1).setDuration(2000).setStartDelay(1700).start();
+        homePageBinding.syn.animate().translationZ(0).alpha(1).setDuration(2200).setStartDelay(1900).start();
+//        homePageBinding.syn.setAlpha(1);
+//        homePageBinding.syn.startAnimation(AnimationUtils.loadAnimation(HomePage.this, R.anim.text_view_move_right));
+
 
         syncButtonVisibility();
 
@@ -599,9 +605,14 @@ public class HomePage extends AppCompatActivity implements MyDialog.myOnClickLis
 //        homePageBinding.refresh.clearAnimation();
 //    }
 
+    public void emptyValue(){
+        villageFilterSpinner(prefManager.getBlockCode());
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         syncButtonVisibility();
+        emptyValue();
     }
 }

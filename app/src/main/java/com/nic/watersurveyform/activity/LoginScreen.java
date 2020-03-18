@@ -98,7 +98,9 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         });
 
         loginScreenBinding.password.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Poppins-Regular.ttf"));
-        loginScreenBinding.textView2.setTranslationY(400);
+        loginScreenBinding.rd.setTranslationY(400);
+        loginScreenBinding.and.setTranslationY(400);
+        loginScreenBinding.dpt.setTranslationY(400);
         loginScreenBinding.tvVersionNumber.setTranslationY(400);
         loginScreenBinding.nicName.setTranslationY(400);
         loginScreenBinding.btnBuy.setTranslationY(400);
@@ -109,7 +111,9 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         loginScreenBinding.btnBuy.setAlpha(0);
 
-        loginScreenBinding.textView2.setAlpha(0);
+        loginScreenBinding.rd.setAlpha(0);
+        loginScreenBinding.and.setAlpha(0);
+        loginScreenBinding.dpt.setAlpha(0);
         loginScreenBinding.tvVersionNumber.setAlpha(0);
         loginScreenBinding.nicName.setAlpha(0);
 
@@ -119,7 +123,9 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         loginScreenBinding.btnBuy.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
 
-        loginScreenBinding.textView2.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
+        loginScreenBinding.rd.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
+        loginScreenBinding.and.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
+        loginScreenBinding.dpt.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
         loginScreenBinding.tvVersionNumber.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(300).start();
         loginScreenBinding.nicName.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(100).start();
 
